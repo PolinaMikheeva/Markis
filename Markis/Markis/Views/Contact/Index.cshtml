@@ -1,0 +1,94 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<!-- Start Page Heading
+    ============================================= -->
+<div class="page-heading shadow dark bg-fixed text-light text-center" style="background-image: url(~/img/2440x1578.png);">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Contact Us</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Page Heading -->
+<!-- Start Breadcrumb Banner
+============================================= -->
+<div class="breadcrumb-items bg-gray text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Page</a></li>
+                    <li class="active">Contact</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Breadcrumb Banner -->
+<!-- Start Contact
+============================================= -->
+<div class="contact-us-area default-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5 thumb">
+                <img src="~/img/contact.png" alt="Thumb">
+            </div>
+            <div class="col-md-7 contact-box">
+                <h2>Ask your question here</h2>
+                <p>
+                    Our next drew much you with rank. Tore many held age hold rose than our. She literature sentiments any contrasted. Set aware joy sense young now tears china shy.
+                </p>
+                <form action="~/mail/contact.php" method="POST" class="contact-form">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="form-group">
+                                <input class="form-control" id="name" name="name" placeholder="Name" type="text">
+                                <span class="alert-error"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input class="form-control" id="email" name="email" placeholder="Email*" type="email">
+                                <span class="alert-error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input class="form-control" id="phone" name="phone" placeholder="Phone" type="text">
+                                <span class="alert-error"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="form-group comments">
+                                <textarea class="form-control" id="comments" name="comments" placeholder="Tell Us About Project *"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <button type="submit" name="submit" id="submit">
+                                Send Message <i class="fa fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Alert Message -->
+                    <div class="col-md-12 alert-notification">
+                        <div id="message" class="alert-msg"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Contact -->
