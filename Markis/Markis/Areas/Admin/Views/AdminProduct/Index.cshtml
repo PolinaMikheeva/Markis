@@ -1,0 +1,79 @@
+﻿@using Markis.Areas.Admin.Models.AdminProduct
+@model List<AdminProductFetchVM>
+@{
+    ViewData["Title"] = "Products";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="px-3">
+    <div class="container-fluid">
+        <!-- start page title -->
+        <div class="py-3 py-lg-4">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h4 class="page-title mb-0">@ViewData["Title"]</h4>
+                </div>
+            </div>
+        </div>
+        <!-- end page title -->
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="header-title">Get @ViewData["Title"] Table</h4>
+
+                        <table id="basic-datatable" class="table dt-responsive nowrap w-100">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Date</th>
+                                    <th>Price</th>
+                                    <th>ItemFeatures</th>
+                                    <th>FileIncluded</th>
+                                    <th>Version</th>
+                                    <th>Framework</th>
+                                    <th>UserId</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @if (Model != null)
+                                {
+                                    @foreach (var product in Model)
+                                    {
+                                        <tr>
+                                            <td>@product.Id</td>
+                                            <td>@product.Title</td>
+                                            <td>@product.Description</td>
+                                            <td>@product.ReleaseDate</td>
+                                            <td>@product.Price</td>
+                                            <td>@product.ItemFeatures</td>
+                                            <td>@product.FileIncluded</td>
+                                            <td>@product.Version</td>
+                                            <td>@product.Framework</td>
+                                            <td>@product.UserId</td>
+                                            <td>
+                                                <a class="btn btn-primary" asp-controller="AdminProduct" asp-action="Edit" asp-route-id="@product.Id">Edit</a>
+                                                @using (Html.BeginForm("Delete", "AdminProduct", FormMethod.Post))
+                                                {
+                                                    @Html.Hidden("id", product.Id)
+                                                    <button type="submit" class="btn btn-primary">Delete</button>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+
+                    </div> <!-- end card body-->
+                </div> <!-- end card -->
+            </div><!-- end col-->
+        </div>
+        <!-- end row-->
+    </div>
+</div>

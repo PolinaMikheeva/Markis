@@ -1,0 +1,64 @@
+﻿@using Markis.Areas.LogIn.Models
+@model LoginViewModel
+@{
+    ViewData["Title"] = "User Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Start Page Heading
+============================================= -->
+<div class="page-heading shadow dark bg-fixed text-light text-center" style="background-image: url(~/img/2440x1578.png);">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>@ViewData["Title"]</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Page Heading -->
+<!-- Start Login
+============================================= -->
+<div class="login-area bg-gray default-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3 login-custom">
+                <div class="heading text-center text-light">
+                    <h4>Welcome Back</h4>
+                    <p>
+                        You can sign in with your email.
+                    </p>
+                </div>
+                <div class="login-items">
+                    <form method="post">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="form-group">
+                                    <input asp-for="UserName" class="form-control" placeholder="Username*" type="text">
+                                    <span asp-validation-for="UserName" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="form-group">
+                                    <input asp-for="Password" class="form-control" placeholder="Password*" type="password">
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <button type="submit">
+                                    Login
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <p class="link-bottom">Not a member yet? <a asp-area="Register" asp-controller="Home" asp-action="Index">Register now</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Login -->

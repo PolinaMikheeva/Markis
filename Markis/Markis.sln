@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Markis.Infrastructure", "Ma
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Markis.Shared", "Markis.Shared\Markis.Shared.csproj", "{29AA9127-0860-4228-8E0A-E24257F49752}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Markis.Persistance", "Markis.Persistance\Markis.Persistance.csproj", "{7B29362B-3135-48E0-9A94-324C5A7995AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Markis.Persistence", "Markis.Persistance\Markis.Persistence.csproj", "{7B29362B-3135-48E0-9A94-324C5A7995AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

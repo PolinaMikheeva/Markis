@@ -1,0 +1,151 @@
+﻿@using Markis.Application.DTOs
+@using Microsoft.AspNetCore.Identity
+@model ProductDto
+@inject Microsoft.AspNetCore.Identity.UserManager<IdentityUser> UserManager
+@{
+    ViewData["Title"] = Model.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentUserId = UserManager.GetUserId(User);
+}
+
+                    <!-- Start Page Heading
+    ============================================= -->
+<div class="page-heading shadow dark bg-fixed text-light text-center" style="background-image: url(~/img/2440x1578.png);">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>@ViewData["Title"]</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Page Heading -->
+<!-- Start Product Single 
+============================================= -->
+@if (Model != null)
+{
+    <div class="product-single-area bg-gray default-padding">
+        <div class="container">
+            <div class="row">
+                <div class="product-description">
+                    <div class="col-md-8 product-info">
+                        <!-- Start Tab Navbar -->
+                        <ul class="nav nav-pills">
+                            <li class="item active">
+                                <a data-toggle="tab" href="#details" aria-expanded="true">
+                                    Details
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- End Tab Navbar -->
+                        <!-- Start Tab Content -->
+                        <div class="tab-content">
+                            <!-- Tab Single -->
+                            <div id="tab1" class="tab-pane fade active in">
+                                <div class="description">
+                                    <h4>@Model.Title</h4>
+                                    <p>@Model.Description</p>
+                                    <h4>Item Features</h4>
+                                    <ul>
+                                        <li>Build with @Model.ItemFeatures</li>
+                                    </ul>
+
+                                    <h4>File Included</h4>
+                                    <ul>
+                                        <li>@Model.FileIncluded</li>
+                                    </ul>
+                                    
+                                    @if (currentUserId != null && currentUserId == Model.IdentityUserId)
+                                    {
+                                        <form asp-area="Product" asp-controller="Home" asp-action="Delete" method="post">
+                                            <input type="hidden" name="id" value="@Model.Id" />
+                                            <button type="submit" class="btn btn-danger">Delete Template</button>
+                                        </form>
+                                    }
+                                </div>
+                            </div>
+                            <!-- End Tab Single -->
+                        </div>
+                        <!-- End Tab Content -->
+                    </div>
+
+                    <!-- Start Product Sidebar -->
+                    <div class="col-md-4 product-sidebar">
+                        <!-- Single Widget -->
+                        <div class="sidebar-item purchase-info">
+                            <h4>Purchase Details</h4>
+                            <div class="select-price">
+                                <div class="price">
+                                    <!-- Hidden Value -->
+                                    <ul id="licence-nav">
+                                        <li class="active"><a href="#regular"></a></li>
+                                        <li><a href="#extended"></a></li>
+                                    </ul>
+                                    <!-- Hidden Value -->
+                                    <!-- Tab panes -->
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="regular">
+                                            <h3>$@Model.Price</h3>
+                                            <ul>
+                                                <li>6 Month Free Support</li>
+                                                <li>Best Product Gurantee</li>
+                                                <li>Free Updates</li>
+                                                <li>No Transaction Fees</li>
+                                                <li>1 User</li>
+                                            </ul>
+                                            <form asp-area="Shopping" asp-controller="Home" asp-action="AddToCart" method="post">
+                                                <input type="hidden" name="productId" value="@Model.Id" />
+                                                <button type="submit" class="btn btn-theme border btn-sm">Purchase Now</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Single Widget -->
+
+                        <!-- Single Widget -->
+                        <div class="sidebar-item item-author">
+                            <h4>Item Seller</h4>
+                            <div class="author-info">
+                                <div class="thumb">
+                                    <img src="~/img/account.png" alt="Thumb">
+                                </div>
+                                <div class="content">
+                                    <a asp-area="Author" asp-controller="Home" asp-action="Index" asp-route-id="@Model.IdentityUserId">@Model.User.Username</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Single Widget -->
+
+                        <!-- Single Widget -->
+                        <div class="sidebar-item item-attributes">
+                            <h4>Item Information</h4>
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Released</th>
+                                        <td>@Model.ReleaseDate.ToString("MMM dd, yyyy")</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Version</th>
+                                        <td>@Model.Version</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Framework</th>
+                                        <td>@Model.Framework</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- End Single Widget -->
+
+                    </div>
+                    <!-- End Product Sidebar -->
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- End Product Single -->

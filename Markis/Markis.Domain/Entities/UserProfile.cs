@@ -8,6 +8,8 @@ namespace Markis.Domain.Entities
 
         public string Username { get; set; }
 
+        public decimal Balance { get; set; }
+
         public string IdentityUserId { get; set; }
         public IdentityUser IdentityUser { get; set; }
 

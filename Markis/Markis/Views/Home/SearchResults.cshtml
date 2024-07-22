@@ -1,0 +1,63 @@
+﻿@using Markis.Application.DTOs
+@model List<ProductDto>
+@{
+    ViewData["Title"] = "Search Results";
+}
+
+<!-- Start Page Heading
+============================================= -->
+<div class="page-heading shadow dark bg-fixed text-light text-center" style="background-image: url(~/img/2440x1578.png);">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>@ViewData["Title"]</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Page Heading -->
+<!-- Start Product Search
+============================================= -->
+<div class="product-single-area trend-product-area bg-gray default-padding">
+    <div class="container">
+        <div class="row">
+            <div class="search-product-lists trend-items">
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var product in Model)
+                    {
+                        <!-- Single Item -->
+                        <div class="col-md-4 equal-height">
+                            <div class="item">
+                                <a asp-area="Product" asp-controller="Home" asp-action="Index" asp-route-id="@product.Id">
+                                    <img src="~/img/favicon.png" alt="Thumb">
+                                </a>
+                                <div class="info-box">
+                                    <div class="top-info">
+                                        <h4>
+                                            <a asp-area="Product" asp-controller="Home" asp-action="Index" asp-route-id="@product.Id">
+                                                @product.Title
+                                            </a>
+                                        </h4>
+                                        <div class="author"><span>@product.ReleaseDate.Day</span> @product.ReleaseDate.ToString("MMM, yyyy")</div>
+                                    </div>
+                                    <div class="bottom-info">
+                                        <div class="price">
+                                            <h4>$@product.Price</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Single Item -->
+                    }
+                }
+                else
+                {
+                    @await Html.PartialAsync("_ErrorSearch")
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Product Search -->

@@ -1,3 +1,6 @@
+using AutoMapper;
+using Markis.Application.Services.Posts;
+using Markis.Application.Services.Products;
 using Markis.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -7,15 +10,39 @@ namespace Markis.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IPostService _postService;
+        private readonly IProductService _productService;
+        private readonly IMapper _mapper;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IPostService postService, IProductService productService, IMapper mapper)
         {
             _logger = logger;
+            _postService = postService;
+            _productService = productService;
+            _mapper = mapper;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var posts = await _postService.GetAllPostsAsync();
+            var products = await _productService.GetAllProductsAsync();
+
+            ViewData["Posts"] = posts;
+            ViewData["Products"] = products;
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Search(string searchText)
+        {
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                return View("EmptySearch");
+            }
+
+            var searchResults = await _productService.SearchProductsAsync(searchText);
+
+            return View("SearchResults", searchResults);
         }
 
         public IActionResult Privacy()

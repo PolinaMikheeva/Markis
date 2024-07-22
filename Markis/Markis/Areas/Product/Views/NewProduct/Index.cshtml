@@ -1,0 +1,102 @@
+﻿@using Markis.Application.DTOs
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+@model ProductDto
+@{
+    ViewData["Title"] = "Create Template";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var user = await UserManager.GetUserAsync(User);
+    ViewData["UserName"] = user?.UserName;
+    ViewData["IdentityUserId"] = user?.Id;
+}
+
+<!-- Start Page Heading
+============================================= -->
+<div class="page-heading shadow dark bg-fixed text-light text-center" style="background-image: url(~/img/2440x1578.png);">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>@ViewData["Title"]</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Page Heading -->
+<!-- Start Create Post
+============================================= -->
+<div class="login-area bg-gray default-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3 login-custom">
+                <div class="heading text-center text-light">
+                    <h4>Create New Product</h4>
+                </div>
+                <div class="login-items">
+                    <form method="post">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="form-group">
+                                    <input name="Title" class="form-control" placeholder="Title" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="form-group">
+                                    <input name="Price" class="form-control" placeholder="Price" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="form-group">
+                                    <textarea name="Description" class="form-control" placeholder="Description" type="text" rows="4"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="form-group">
+                                    <textarea name="ItemFeatures" class="form-control" placeholder="Item Features" type="text" rows="2"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="form-group">
+                                    <textarea name="FileIncluded" class="form-control" placeholder="File Included" type="text" rows="2"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="form-group">
+                                    <input name="Version" class="form-control" placeholder="Version" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="form-group">
+                                    <input name="Framework" class="form-control" placeholder="Framework" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Hidden fields -->
+                        <input type="hidden" name="UserName" value="@ViewData["UserName"]" />
+                        <input type="hidden" name="IdentityUserId" value="@ViewData["IdentityUserId"]" />
+
+                        <div class="col-md-12">
+                            <div class="row">
+                                <button type="submit">
+                                    Create
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Create Post -->

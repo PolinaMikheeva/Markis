@@ -1,0 +1,32 @@
+﻿@using Markis.Domain.Entities
+@model UserProfile
+@{
+    ViewData["Title"] = "Edit Product";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Start input -->
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    <div class="mb-2">
+                        <label class="form-label">Id</label>
+                        <input type="text" class="form-control" asp-for="Id" readonly>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">IdentityUserId</label>
+                        <input type="text" class="form-control" asp-for="IdentityUserId" readonly>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Username</label>
+                        <input type="text" class="form-control" asp-for="Username">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End input -->

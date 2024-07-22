@@ -1,0 +1,78 @@
+﻿@using Markis.Areas.Register.Models
+@model RegisterViewModel
+@{
+    ViewBag.Title = "User Registration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Start Page Heading ============================================= -->
+<div class="page-heading shadow dark bg-fixed text-light text-center" style="background-image: url(~/img/2440x1578.png);">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>@ViewData["Title"]</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Page Heading -->
+<!-- Start Login ============================================= -->
+<div class="login-area bg-gray default-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3 login-custom">
+                <div class="heading text-center text-light">
+                    <h4>Welcome New Creator</h4>
+                    <p>
+                        You can register by entering your email.
+                    </p>
+                </div>
+                <div class="login-items">
+                    <form method="post">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="form-group">
+                                    <input asp-for="UserName" class="form-control" placeholder="Username*" type="text">
+                                    <span asp-validation-for="UserName" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="form-group">
+                                    <input asp-for="Email" class="form-control" placeholder="Email*" type="email">
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="form-group">
+                                    <input asp-for="Password" class="form-control" placeholder="Password*" type="password">
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="form-group">
+                                    <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password*" type="password">
+                                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <button type="submit">
+                                    Register
+                                </button>
+                            </div>
+                        </div>
+                        <p class="link-bottom">Already have an account? <a asp-area="Login" asp-controller="Home" asp-action="Index">Log In</a></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Login -->

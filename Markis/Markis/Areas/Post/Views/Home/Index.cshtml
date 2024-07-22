@@ -1,0 +1,196 @@
+﻿@using Markis.Application.DTOs
+@using Microsoft.AspNetCore.Identity
+@model PostDto
+@inject Microsoft.AspNetCore.Identity.UserManager<IdentityUser> UserManager
+
+@{
+    ViewData["Title"] = "Post";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentUserId = UserManager.GetUserId(User);
+}
+
+<!-- Start Page Heading -->
+<div class="page-heading shadow dark bg-fixed text-light text-center" style="background-image: url(~/img/2440x1578.png);">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>@ViewData["Title"]</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Page Heading -->
+<!-- Start Blog -->
+@if (Model != null)
+{
+    <div id="blog" class="blog-area full-width single default-padding">
+        <div class="container">
+            <div class="row">
+                <div class="blog-items">
+                    <div class="col-md-10 col-md-offset-1">
+                        <div class="item">
+                            <div class="thumb">
+                                <a asp-area="Post" asp-controller="Home" asp-action="Index" asp-route-id="@Model.Id"></a>
+                            </div>
+                            <img src="~/img/logo.png" alt="Thumb">
+                            <div class="info">
+                                <h3>@Model.Title</h3>
+                                <div class="meta">
+                                    <ul>
+                                        <li>
+                                            <a asp-area="Author" asp-controller="Home" asp-action="Index" asp-route-id="@Model.IdentityUserId"><i class="fas fa-user"></i> @Model.UserName</a>
+                                        </li>
+                                        <li>
+                                            <a><i class="fas fa-comments"></i> <span id="comment-count">@Model.Comments.Count</span> Comments</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="date">
+                                    <h4><span>@Model.ReleaseDate.Day</span> @Model.ReleaseDate.ToString("MMM, yyyy")</h4>
+                                </div>
+                                <p>@Model.Description</p>
+                                @if (currentUserId == @Model.IdentityUserId)
+                                {
+                                    <form asp-area="Post" asp-controller="Home" asp-action="Delete" method="post">
+                                        <input type="hidden" name="id" value="@Model.Id" />
+                                        <button type="submit" class="btn btn-danger">Delete Post</button>
+                                    </form>
+                                }
+
+                                <div class="comments-area">
+                                    <div class="comments-title">
+                                        <h4><span id="comment-count">@Model.Comments.Count</span> comments</h4>
+                                        <div id="comments-list" class="comments-list">
+                                            @foreach (var comment in Model.Comments)
+                                            {
+                                                <div class="commen-item">
+                                                    <div class="avatar">
+                                                        <img src="~/img/account.png" alt="Author">
+                                                    </div>
+                                                    <div class="content">
+                                                        <h5>@comment.UserName</h5>
+                                                        <div class="comments-info">
+                                                            <p>@comment.ReleaseDate.ToString("MMM dd, yyyy")</p>
+                                                        </div>
+                                                        <p>@comment.Text</p>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="comments-form">
+                                    <div class="title">
+                                        <h4>Leave a comment</h4>
+                                    </div>
+                                    <form id="dataForm" class="contact-comments">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12">
+                                                <div class="form-group comments">
+                                                    <!-- Comment -->
+                                                    <textarea id="text" name="text" class="form-control" placeholder="Comment"></textarea>
+                                                </div>
+                                                <div class="form-group full-width submit">
+                                                    <button type="button" onclick="sendData()">Comment</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" id="PostId" name="PostId" value="@Model.Id" />
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.7/signalr.min.js"></script>
+    <script type="text/javascript">
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/commentHub")
+            .build();
+
+        connection.on("ReceiveComment", function (user, message, postId) {
+            if (postId === @Model.Id) {
+                const commentList = document.getElementById("comments-list");
+                const commentCount = document.getElementById("comment-count");
+
+                const newComment = `
+                            <div class="commen-item">
+                                <div class="avatar">
+                                    <img src="/img/account.png" alt="Author">
+                                </div>
+                                <div class="content">
+                                    <h5>${user}</h5>
+                                    <div class="comments-info">
+                                        <p>${new Date().toLocaleDateString()}</p>
+                                    </div>
+                                    <p>${message}</p>
+                                </div>
+                            </div>
+                        `;
+
+                commentList.innerHTML += newComment;
+                commentCount.textContent = parseInt(commentCount.textContent) + 1;
+            }
+        });
+
+        connection.start().catch(function (err) {
+            return console.error(err.toString());
+        });
+
+        document.getElementById("comment-form").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const text = document.getElementById("comment-text").value;
+            const postId = document.getElementById("post-id").value;
+
+            if (text.trim() !== "") {
+                connection.invoke("SendComment", "@UserManager.GetUserName(User)", text, parseInt(postId)).catch(function (err) {
+                    return console.error(err.toString());
+                });
+
+                document.getElementById("comment-text").value = "";
+            }
+        });
+    </script>
+
+    <script>
+        async function sendData() {
+            // Получаем данные из формы
+            const formData = new FormData(document.getElementById('dataForm'));
+            const data = {
+                text: formData.get('text'),
+                PostId: @Model.Id
+            };
+
+            // Отправляем данные на сервер с помощью fetch
+            try {
+                const response = await fetch('https://localhost:7040/Post/Home/AddComment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('Успех:', result);
+                    document.getElementById('text').value = '';
+                } else {
+                    console.error('Ошибка сервера:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Ошибка сети:', error);
+            }
+        }
+    </script>
+}
+

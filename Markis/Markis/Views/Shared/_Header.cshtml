@@ -1,6 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager;
+@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<IdentityUser> SignInManager
 @{
+    var userId = UserManager.GetUserId(User);
 }
 
 <!-- Start Header Top
@@ -8,12 +10,7 @@
 <div class="top-bar-area bg-theme text-light">
     <div class="container">
         <div class="row">
-            <div class="col-md-8 col-sm-8 basic-info text-left">
-                <ul>
-                    <li>Total Items: <a>319</a></li>
-                    <li>Community Users: <strong>397877</strong></li>
-                </ul>
-            </div>
+            <div class="col-md-8 col-sm-8 basic-info text-left"></div>
             @if (SignInManager.IsSignedIn(User))
             {
                 <div class="col-md-4 col-sm-4 login-info text-right">
@@ -23,7 +20,7 @@
                                 <a href="#" class="dropdown-toggle active" data-toggle="dropdown">@User.Identity.Name</a>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a asp-area="auth" asp-controller="login" asp-action="logout">Log Out</a>
+                                        <a asp-area="Login" asp-controller="Home" asp-action="Logout">Log Out</a>
                                     </li>
                                 </ul>
                             </li>
@@ -34,12 +31,12 @@
             else
             {
                 <div class="col-md-4 col-sm-4 login-info text-right">
-                    <a asp-area="Auth" asp-controller="Login" asp-action="Index"><i class="fas fa-user"></i> Login</a>
+                    <a asp-area="Login" asp-controller="Home" asp-action="Index"><i class="fas fa-user"></i> Login</a>
                 </div>
             }
         </div>
     </div>
-</div>
+    </div>
 <!-- End Header Top -->
 <!-- Start Navigation -->
 <nav class="navbar navbar-default attr-border bootsnav">
@@ -67,28 +64,10 @@
         <div class="attr-nav">
             <ul>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <a asp-area="Shopping" asp-controller="Home" asp-action="Index" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-shopping-cart"></i>
-                        <span class="badge">3</span>
                     </a>
-                    <ul class="dropdown-menu cart-list">
-                        <li>
-                            <a asp-area="" asp-controller="Product" asp-action="Index" class="photo"><img src="~/img/100x100.png" class="cart-thumb" alt="" /></a>
-                            <h6>Examin - Education and LMS Theme</h6>
-                            <p>$49.00</p>
-                        </li>
-                        <li>
-                            <a asp-area="" asp-controller="Product" asp-action="Index" class="photo"><img src="~/img/100x100.png" class="cart-thumb" alt="" /></a>
-                            <h6>Rescaf - Food & Restaurant Template</h6>
-                            <p>$17.00</p>
-                        </li>
-                        <li class="total">
-                            <span class="pull-right"><strong>Total</strong>: $66.00</span>
-                            <a href="#" class="btn btn-default btn-cart">Checkout</a>
-                        </li>
-                    </ul>
                 </li>
-                <li class="search"><a href="#"><i class="fa fa-search"></i></a></li>
             </ul>
         </div>
         <!-- End Atribute Navigation -->
@@ -105,67 +84,17 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="navbar-menu">
             <ul class="nav navbar-nav navbar-right" data-in="#" data-out="#">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle active" data-toggle="dropdown">Pages</a>
-                    <ul class="dropdown-menu">
-                        <li><a asp-area="" asp-controller="About" asp-action="Index">About Us</a></li>
-                        <li><a asp-area="" asp-controller="AuthorProfile" asp-action="Index">Author Profile</a></li>
-                        <li><a asp-area="" asp-controller="Search" asp-action="Index">Search Product</a></li>
-                        <li><a asp-area="" asp-controller="Product" asp-action="Index">Product Single</a></li>
-                        <li><a asp-area="" asp-controller="Contact" asp-action="Index">Contact</a></li>
-                        <li><a asp-area="" asp-controller="Login" asp-action="Index">Login</a></li>
-                        <!-- <li><a asp-area="" asp-controller="Error" asp-action="Index">Error Page</a></li> -->
-                    </ul>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                <li>
+                    <a asp-area="Author" asp-controller="Home" asp-action="Index" asp-route-id="@userId">Author Profile</a>
                 </li>
+                }
                 <li class="dropdown megamenu-fw">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">All Product</a>
-                    <ul class="dropdown-menu megamenu-content" role="menu">
-                        <li>
-                            <div class="row">
-                                <div class="col-menu col-md-3">
-                                    <h6 class="title">Web Templates</h6>
-                                    <div class="content">
-                                        <ul class="menu-col">
-                                            <li><a href="#">Corporate</a></li>
-                                            <li><a href="#">Admin Template</a></li>
-                                            <li><a href="#">Wedding</a></li>
-                                            <li><a href="#">Education</a></li>
-                                            <li><a href="#">Hospital</a></li>
-                                            <li><a href="#">Charity</a></li>
-                                        </ul>
-                                    </div>
-                                </div><!-- end col-3 -->
-                                <div class="col-menu col-md-3">
-                                    <h6 class="title">WordPress Theme</h6>
-                                    <div class="content">
-                                        <ul class="menu-col">
-                                            <li><a href="#">Creative</a></li>
-                                            <li><a href="#">Real Estate</a></li>
-                                            <li><a href="#">Megazine</a></li>
-                                            <li><a href="#">Sports</a></li>
-                                            <li><a href="#">Entertainment</a></li>
-                                        </ul>
-                                    </div>
-                                </div><!-- end col-3 -->
-                            </div><!-- end row -->
-                        </li>
-                    </ul>
-                </li>
-                <!-- <li>
-                    <a href="#">New</a>
+                    <a asp-area="Templates" asp-controller="Home" asp-action="Index">All Products</a>
                 </li>
                 <li>
-                    <a href="#">Popular</a>
-                </li> -->
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle active" data-toggle="dropdown">Blog</a>
-                    <ul class="dropdown-menu">
-                        <li><a asp-area="" asp-controller="Blog" asp-action="Index">Blog</a></li>
-                        <li><a asp-area="" asp-controller="Post" asp-action="Index">Post</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a asp-area="" asp-controller="Contact" asp-action="Index">Contact</a>
+                    <a asp-area="Blog" asp-controller="Home" asp-action="Index">Blog</a>
                 </li>
             </ul>
         </div><!-- /.navbar-collapse -->

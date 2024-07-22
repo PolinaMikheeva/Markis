@@ -1,0 +1,73 @@
+﻿@using Markis.Areas.Admin.Models.AdminPost
+@model List<AdminPostFetchVM>
+@{
+    ViewData["Title"] = "Posts";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="px-3">
+    <div class="container-fluid">
+        <!-- start page title -->
+        <div class="py-3 py-lg-4">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h4 class="page-title mb-0">@ViewData["Title"]</h4>
+                </div>
+            </div>
+        </div>
+        <!-- end page title -->
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="header-title">Get @ViewData["Title"] Table</h4>
+
+                        <table id="basic-datatable" class="table dt-responsive nowrap w-100">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Title</th>
+                                    <th>ShortDescription</th>
+                                    <th>Description</th>
+                                    <th>Date</th>
+                                    <th>Username</th>
+                                    <th>UserId</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @if (Model != null)
+                                {
+                                    @foreach (var post in Model)
+                                    {
+                                        <tr>
+                                            <td>@post.Id</td>
+                                            <td>@post.Title</td>
+                                            <td>@post.ShortDescription</td>
+                                            <td>@post.Description</td>
+                                            <td>@post.ReleaseDate</td>
+                                            <td>@post.UserName</td>
+                                            <td>@post.UserId</td>
+                                            <td>
+                                                <a class="btn btn-primary" asp-controller="AdminPost" asp-action="Edit" asp-route-id="@post.Id">Edit</a>
+                                                @using (Html.BeginForm("Delete", "AdminPost", FormMethod.Post))
+                                                {
+                                                    @Html.Hidden("id", post.Id)
+                                                    <button type="submit" class="btn btn-primary">Delete</button>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+
+                    </div> <!-- end card body-->
+                </div> <!-- end card -->
+            </div><!-- end col-->
+        </div>
+        <!-- end row-->
+    </div>
+</div>

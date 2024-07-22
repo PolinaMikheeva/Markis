@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Markis.Persistance.Migrations
+namespace Markis.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -22,7 +22,7 @@ namespace Markis.Persistance.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Markis.Persistance.Entities.Comment", b =>
+            modelBuilder.Entity("Markis.Domain.Entities.Comment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,33 +30,39 @@ namespace Markis.Persistance.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("PostId")
-                        .HasColumnType("int");
+                    b.Property<string>("IdentityUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("ProductId")
+                    b.Property<int>("PostId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Text")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PostId");
+                    b.HasIndex("IdentityUserId");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("PostId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("Markis.Persistance.Entities.Post", b =>
+            modelBuilder.Entity("Markis.Domain.Entities.Post", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -65,6 +71,10 @@ namespace Markis.Persistance.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdentityUserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -89,7 +99,7 @@ namespace Markis.Persistance.Migrations
                     b.ToTable("Posts");
                 });
 
-            modelBuilder.Entity("Markis.Persistance.Entities.PostTag", b =>
+            modelBuilder.Entity("Markis.Domain.Entities.PostTag", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -106,17 +116,13 @@ namespace Markis.Persistance.Migrations
                     b.ToTable("PostTags");
                 });
 
-            modelBuilder.Entity("Markis.Persistance.Entities.Product", b =>
+            modelBuilder.Entity("Markis.Domain.Entities.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Browsers")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -127,6 +133,10 @@ namespace Markis.Persistance.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Framework")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdentityUserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -158,7 +168,7 @@ namespace Markis.Persistance.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Markis.Persistance.Entities.ProductTag", b =>
+            modelBuilder.Entity("Markis.Domain.Entities.ProductTag", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -175,13 +185,61 @@ namespace Markis.Persistance.Migrations
                     b.ToTable("ProductTags");
                 });
 
-            modelBuilder.Entity("Markis.Persistance.Entities.UserProfile", b =>
+            modelBuilder.Entity("Markis.Domain.Entities.ShoppingCart", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ShoppingCarts");
+                });
+
+            modelBuilder.Entity("Markis.Domain.Entities.ShoppingCartItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ShoppingCartId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("ShoppingCartId");
+
+                    b.ToTable("ShoppingCartItems");
+                });
+
+            modelBuilder.Entity("Markis.Domain.Entities.UserProfile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("IdentityUserId")
                         .IsRequired()
@@ -426,32 +484,34 @@ namespace Markis.Persistance.Migrations
                     b.ToTable("ProductProductTags", (string)null);
                 });
 
-            modelBuilder.Entity("Markis.Persistance.Entities.Comment", b =>
+            modelBuilder.Entity("Markis.Domain.Entities.Comment", b =>
                 {
-                    b.HasOne("Markis.Persistance.Entities.Post", "Post")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
                         .WithMany()
-                        .HasForeignKey("PostId");
-
-                    b.HasOne("Markis.Persistance.Entities.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId");
-
-                    b.HasOne("Markis.Persistance.Entities.UserProfile", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("IdentityUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Post");
+                    b.HasOne("Markis.Domain.Entities.Post", "Post")
+                        .WithMany("Comments")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.Navigation("Product");
+                    b.HasOne("Markis.Domain.Entities.UserProfile", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("IdentityUser");
+
+                    b.Navigation("Post");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Markis.Persistance.Entities.Post", b =>
+            modelBuilder.Entity("Markis.Domain.Entities.Post", b =>
                 {
-                    b.HasOne("Markis.Persistance.Entities.UserProfile", "User")
+                    b.HasOne("Markis.Domain.Entities.UserProfile", "User")
                         .WithMany("Posts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -460,9 +520,9 @@ namespace Markis.Persistance.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Markis.Persistance.Entities.Product", b =>
+            modelBuilder.Entity("Markis.Domain.Entities.Product", b =>
                 {
-                    b.HasOne("Markis.Persistance.Entities.UserProfile", "User")
+                    b.HasOne("Markis.Domain.Entities.UserProfile", "User")
                         .WithMany("Products")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -471,7 +531,37 @@ namespace Markis.Persistance.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Markis.Persistance.Entities.UserProfile", b =>
+            modelBuilder.Entity("Markis.Domain.Entities.ShoppingCart", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Markis.Domain.Entities.ShoppingCartItem", b =>
+                {
+                    b.HasOne("Markis.Domain.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Markis.Domain.Entities.ShoppingCart", "ShoppingCart")
+                        .WithMany("Items")
+                        .HasForeignKey("ShoppingCartId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("ShoppingCart");
+                });
+
+            modelBuilder.Entity("Markis.Domain.Entities.UserProfile", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
                         .WithMany()
@@ -535,13 +625,13 @@ namespace Markis.Persistance.Migrations
 
             modelBuilder.Entity("PostPostTag", b =>
                 {
-                    b.HasOne("Markis.Persistance.Entities.PostTag", null)
+                    b.HasOne("Markis.Domain.Entities.PostTag", null)
                         .WithMany()
                         .HasForeignKey("PostTagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Markis.Persistance.Entities.Post", null)
+                    b.HasOne("Markis.Domain.Entities.Post", null)
                         .WithMany()
                         .HasForeignKey("PostsId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -550,20 +640,30 @@ namespace Markis.Persistance.Migrations
 
             modelBuilder.Entity("ProductProductTag", b =>
                 {
-                    b.HasOne("Markis.Persistance.Entities.ProductTag", null)
+                    b.HasOne("Markis.Domain.Entities.ProductTag", null)
                         .WithMany()
                         .HasForeignKey("ProductTagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Markis.Persistance.Entities.Product", null)
+                    b.HasOne("Markis.Domain.Entities.Product", null)
                         .WithMany()
                         .HasForeignKey("ProductsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Markis.Persistance.Entities.UserProfile", b =>
+            modelBuilder.Entity("Markis.Domain.Entities.Post", b =>
+                {
+                    b.Navigation("Comments");
+                });
+
+            modelBuilder.Entity("Markis.Domain.Entities.ShoppingCart", b =>
+                {
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("Markis.Domain.Entities.UserProfile", b =>
                 {
                     b.Navigation("Posts");
 

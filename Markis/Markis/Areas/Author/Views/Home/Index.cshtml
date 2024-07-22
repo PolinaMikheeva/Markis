@@ -1,0 +1,232 @@
+﻿@using Markis.Application.DTOs
+@using Microsoft.AspNetCore.Identity
+@inject Microsoft.AspNetCore.Identity.UserManager<IdentityUser> UserManager
+@{
+    ViewData["Title"] = "Author Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var userProfile = ViewData["UserProfiles"] as AuthorDto;
+    var posts = ViewData["Posts"] as List<PostDto>;
+    var products = ViewData["Products"] as List<ProductDto>;
+    var currentUserId = UserManager.GetUserId(User);
+}
+
+<!-- Start Author Profile ============================================= -->
+<div class="author-profile-area shadow-less bg-gray default-padding">
+    <div class="container">
+        <div class="row">
+            <div class="author-info">
+                <div class="thumb col-md-2 col-md-offset-0 col-sm-3 col-sm-offset-3">
+                    <img src="~/img/account.png" alt="Thumb">
+                </div>
+                <div class="profile-info col-md-10 col-sm-12">
+                    <div class="top-info">
+                        @if (userProfile != null)
+                        {
+                            <div class="bio">
+                                <h4>Name: @userProfile.Username</h4>
+                                @if (currentUserId == userProfile.IdentityUserId)
+                                {
+                                    <h5>Balance: $@userProfile.Balance</h5>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <form asp-action="CreateUserProfile" method="post">
+                                <div class="row">
+                                    <div class="form-group">
+                                        <input name="userName" class="form-control" placeholder="Enter your name" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <button type="submit">
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        }
+                    </div>
+
+                    <!-- Start Author Content -->
+                    <div class="author-content trend-product-area shadow-less">
+                        <!-- Tab Nav -->
+                        <ul class="nav nav-pills" id="authorTabs">
+                            <li class="active">
+                                <a data-toggle="tab" href="#tab1" aria-expanded="true" data-tab="portfolio">
+                                    <span>Portfolio</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#tab2" aria-expanded="false" data-tab="blog">
+                                    <span>Blog</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- End Tab Nav -->
+                        <!-- Start Tab Content -->
+                        <div class="tab-content tab-content-info">
+                            <!-- Portfolio Tab Content -->
+                            <div id="tab1" class="tab-pane fade active in">
+                                @if (userProfile != null)
+                                {
+                                    @if (currentUserId == userProfile.IdentityUserId)
+                                    {
+                                        <a class="btn btn-theme border btn-sm" asp-area="Product" asp-controller="NewProduct" asp-action="Index">
+                                            Create Template
+                                        </a>
+                                    }
+                                }
+                                <h4></h4>
+                                <!-- Product Listings -->
+                                <div class="author-portfolio trend-items">
+                                    <div class="row">
+                                        @if (products != null)
+                                        {
+                                            @foreach (var product in products)
+                                            {
+                                                @if (product.IdentityUserId != null && userProfile != null && product.IdentityUserId == userProfile.IdentityUserId)
+                                                {
+                                                    <!-- Single Item -->
+                                                    <div class="col-md-4 col-sm-6 single-item">
+                                                        <div class="item">
+                                                            <div class="thumb">
+                                                                <a asp-area="Product" asp-controller="Home" asp-action="Index" asp-route-id="@product.Id"><img src="~/img/favicon.png" alt="Thumb"></a>
+                                                            </div>
+                                                            <div class="info-box">
+                                                                <div class="top-info">
+                                                                    <h4>
+                                                                        <a asp-area="Product" asp-controller="Home" asp-action="Index" asp-route-id="@product.Id">@product.Title</a>
+                                                                    </h4>
+                                                                    <div class="author">
+                                                                        by <a asp-area="Author" asp-controller="Home" asp-action="Index" asp-route-id="@product.IdentityUserId">@product.User.Username</a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="bottom-info">
+                                                                    <div class="item-preview">
+                                                                        <a asp-area="Product" asp-controller="Home" asp-action="Index" asp-route-id="@product.Id">Read More</a>
+                                                                    </div>
+                                                                    <div class="price">
+                                                                        <h4>$@product.Price</h4>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
+                                        }
+                                    </div>
+                                </div>
+
+                                <!-- Pagination Controls for Products -->
+                                <div class="col-md-12 pagi-area text-center row">
+                                    <nav aria-label="navigation">
+                                        <ul class="pagination">
+                                            @if ((int)ViewData["ProductsCurrentPage"] > 1)
+                                            {
+                                                <li>
+                                                    <a asp-action="Index" asp-route-id="@userProfile.IdentityUserId" asp-route-page="@((int)ViewData["ProductsCurrentPage"] - 1)"><i class="fas fa-angle-double-left"></i></a>
+                                                </li>
+                                            }
+
+                                            @for (var i = 1; i <= (int)ViewData["ProductsTotalPages"]; i++)
+                                            {
+                                                <li class="@(i == (int)ViewData["ProductsCurrentPage"] ? "active" : "")">
+                                                    <a asp-action="Index" asp-route-id="@userProfile.IdentityUserId" asp-route-page="@i">@i</a>
+                                                </li>
+                                            }
+
+                                            @if ((int)ViewData["ProductsCurrentPage"] < (int)ViewData["ProductsTotalPages"])
+                                            {
+                                                <li>
+                                                    <a asp-action="Index" asp-route-id="@userProfile.IdentityUserId" asp-route-page="@((int)ViewData["ProductsCurrentPage"] + 1)"><i class="fas fa-angle-double-right"></i></a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </nav>
+                                </div>
+                                <!-- End Pagination -->
+                            </div>
+                            <!-- End Portfolio Tab Content -->
+                            <!-- Blog Tab Content -->
+                            <div id="tab2" class="tab-pane fade">
+                                @if (userProfile != null)
+                                {
+                                    @if (currentUserId == userProfile.IdentityUserId)
+                                    {
+                                        <a class="btn btn-theme border btn-sm" asp-area="Post" asp-controller="NewPost" asp-action="Index">
+                                            Create Post
+                                        </a>
+                                    }
+                                }
+                                <h4></h4>
+                                <div class="author-portfolio trend-items">
+                                    <div class="row">
+                                        @if (userProfile != null)
+                                        {
+                                            @if (posts != null)
+                                            {
+                                                @foreach (var post in posts)
+                                                {
+                                                    @if (post.IdentityUserId != null && userProfile != null && post.IdentityUserId == userProfile.IdentityUserId)
+                                                    {
+                                                        <!-- Single Item -->
+                                                        <div class="col-md-4 col-sm-6 single-item">
+                                                            <div class="item">
+                                                                <div class="thumb">
+                                                                    <a asp-area="Post" asp-controller="Home" asp-action="Index" asp-route-id="@post.Id"><img src="~/img/favicon.png" alt="Thumb"></a>
+                                                                </div>
+                                                                <div class="info-box">
+                                                                    <div class="top-info">
+                                                                        <h4>
+                                                                            <a asp-area="Post" asp-controller="Home" asp-route-id="@post.Id" asp-action="Index">@post.Title</a>
+                                                                        </h4>
+                                                                        <div class="author">
+                                                                            by <a asp-area="Author" asp-controller="Home" asp-action="Index" asp-route-id="@post.IdentityUserId">
+                                                                                <i class="fas fa-user"></i>
+                                                                                @post.UserName
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="item-type">
+                                                                            <p><i class="fas fa-comments"></i> @post.Comments.Count Comments</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="bottom-info">
+                                                                        <div class="item-preview">
+                                                                            <a class="btn btn-theme border btn-sm" asp-area="Post" asp-controller="Home" asp-action="Index" asp-route-id="@post.Id">
+                                                                                Read More
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- End Single Item -->
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <p>No Posts</p>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <p>No User</p>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Blog Tab Content -->
+                        </div>
+                        <!-- End Tab Content -->
+                    </div>
+                    <!-- End Author Content -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Author Profile -->

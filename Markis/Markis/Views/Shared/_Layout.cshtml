@@ -23,7 +23,7 @@
     <link href="~/css/owl.theme.default.min.css" rel="stylesheet" />
     <link href="~/css/animate.css" rel="stylesheet" />
     <link href="~/css/bootsnav.css" rel="stylesheet" />
-    <link href="style.css" rel="stylesheet">
+    <link href="~/css/style.css" rel="stylesheet">
     <link href="~/css/responsive.css" rel="stylesheet" />
     <!-- ========== End Stylesheet ========== -->
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -50,7 +50,6 @@
         @await Html.PartialAsync("_Header")
     </header>
     <!-- End Header -->
-    <main></main>
     @RenderBody()
     <footer>@await Html.PartialAsync("_Footer")</footer>
     <!-- jQuery Frameworks ============================================= -->
@@ -69,5 +68,6 @@
     <script src="~/js/jquery.nice-select.min.js"></script>
     <script src="~/js/bootsnav.js"></script>
     <script src="~/js/main.js"></script>
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

@@ -13,8 +13,12 @@
         public DateTime ReleaseDate { get; set; }
 
         public int UserId { get; set; }
+        public string IdentityUserId { get; set; }
+
         public UserProfile User { get; set; }
 
         public List<PostTag> PostTags { get; set; }
+
+        public List<Comment> Comments { get; set; } = new List<Comment>();
     }
 }

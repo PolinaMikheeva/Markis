@@ -1,0 +1,70 @@
+﻿@using Markis.Application.DTOs
+@model List<PostDto>
+@{
+    ViewData["Title"] = "Blog";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+                    <!-- Start Page Heading
+    ============================================= -->
+<div class="page-heading shadow dark bg-fixed text-light text-center" style="background-image: url(~/img/2440x1578.png);">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>@ViewData["Title"]</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Page Heading -->
+
+<!-- Start Blog 
+============================================= -->
+<div class="blog-area full-blog full-width bg-gray default-padding">
+    <div class="container">
+        <div class="row">
+            <div class="blog-items">
+
+                @if (Model != null)
+                {
+                    @foreach (var post in Model)
+                    {
+                        <!-- Single Item -->
+                        <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 single-item">
+                            <div class="item">
+                                <h4>
+                                    <a asp-area="Post" asp-controller="Home" asp-route-id="@post.Id" asp-action="Index">@post.Title</a>
+                                </h4>
+                                <div class="info">
+                                    <div class="meta">
+                                        <ul>
+                                            <li>
+                                                <a asp-area="Author" asp-controller="Home" asp-action="Index" asp-route-id="@post.IdentityUserId"><i class="fas fa-user"></i>@post.UserName</a>
+                                            </li>
+                                            <li>
+                                                <a><i class="fas fa-comments"></i> @post.Comments.Count Comments</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <p>
+                                        <span>@post.ReleaseDate.Day</span> @post.ReleaseDate.ToString("MMM, yyyy")
+                                    </p>
+                                    <p>
+                                        @post.ShortDescription
+                                    </p>
+                                    <a class="btn btn-theme border btn-sm" asp-area="Post" asp-controller="Home" asp-action="Index" asp-route-id="@post.Id">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Single Item -->
+                    }
+                }
+                else
+                {
+                    <p>Blog is empty</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Blog -->

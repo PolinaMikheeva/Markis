@@ -4,9 +4,7 @@
     {
         public Product()
         {
-            ItemFeatures = new List<string>();
-            FileIncluded = new List<string>();
-            Browsers = new List<string>();
+            ProductTags = new List<ProductTag>();
         }
 
         public int Id { get; set; }
@@ -19,15 +17,15 @@
 
         public decimal Price { get; set; }
 
-        public List<string> ItemFeatures { get; set; }
+        public string ItemFeatures { get; set; }
 
-        public List<string> FileIncluded { get; set; }
+        public string FileIncluded { get; set; }
 
         public string Version { get; set; }
 
         public string Framework { get; set; }
 
-        public List<string> Browsers { get; set; }
+        public string IdentityUserId { get; set; }
 
         public int UserId { get; set; }
         public UserProfile User { get; set; }
